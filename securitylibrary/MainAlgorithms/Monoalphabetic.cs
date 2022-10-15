@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,17 +10,72 @@ namespace SecurityLibrary
     {
         public string Analyse(string plainText, string cipherText)
         {
-            throw new NotImplementedException();
+            cipherText = cipherText.ToLower();
+            Dictionary<Char, Char> mp = new Dictionary<char, char>();
+            char xx = 'a';
+            char val = 'A';
+            for (int i = 0; i < 26; i++)
+            {
+
+                mp[xx] = val;
+                val++;
+                xx++;
+            }
+            for (int i = 0; i < plainText.Length; i++)
+            {
+                mp[plainText[i]] = cipherText[i];
+            }
+            string str = "";
+
+            var list = mp.Keys.ToList();
+            list.Sort();
+
+            foreach (var key in list)
+            {
+                str += mp[key];
+            }
+            return str;
+            //throw new NotImplementedException();
         }
 
         public string Decrypt(string cipherText, string key)
         {
-            throw new NotImplementedException();
+            string str = "";
+            char x = 'a';
+            cipherText = cipherText.ToLower();
+            Dictionary<Char, Char> mp = new Dictionary<char, char>();
+            for (int i = 0; i < key.Length; i++)
+            {
+                mp.Add(key[i], x);
+                //Console.Write(x);
+                x++;
+            }
+            for (int i = 0; i < cipherText.Length; i++)
+            {
+                char val = cipherText[i];
+                str += mp[val];
+            }
+            return str;
+            //throw new NotImplementedException();
         }
 
         public string Encrypt(string plainText, string key)
         {
-            throw new NotImplementedException();
+            string str = "";
+            char x = 'a';
+            Dictionary<Char, Char> mp = new Dictionary<char, char>();
+            for (int i = 0; i < key.Length; i++)
+            {
+                mp.Add(x, key[i]);
+                x++;
+            }
+            for (int i = 0; i < plainText.Length; i++)
+            {
+                char val = plainText[i];
+                str += mp[val];
+            }
+            return str;
+            //throw new NotImplementedException();
         }
 
         /// <summary>
@@ -56,7 +111,61 @@ namespace SecurityLibrary
         /// <returns>Plain text</returns>
         public string AnalyseUsingCharFrequency(string cipher)
         {
-            throw new NotImplementedException();
+            string str = "";
+            Dictionary<int, char> mp = new Dictionary<int, char>();
+            mp.Add(1, 'E');
+            mp.Add(2, 'T');
+            mp.Add(3, 'A');
+            mp.Add(4, 'O');
+            mp.Add(5, 'I');
+            mp.Add(6, 'N');
+            mp.Add(7, 'S');
+            mp.Add(8, 'R');
+            mp.Add(9, 'H');
+            mp.Add(10, 'L');
+            mp.Add(11, 'D');
+            mp.Add(12, 'C');
+            mp.Add(13, 'U');
+            mp.Add(14, 'M');
+            mp.Add(15, 'F');
+            mp.Add(16, 'P');
+            mp.Add(17, 'G');
+            mp.Add(18, 'W');
+            mp.Add(19, 'Y');
+            mp.Add(20, 'B');
+            mp.Add(21, 'V');
+            mp.Add(22, 'K');
+            mp.Add(23, 'X');
+            mp.Add(24, 'J');
+            mp.Add(25, 'Q');
+            mp.Add(26, 'Z');
+            Dictionary<Char, int> count_mp = new Dictionary<char, int>();
+            for (char a = 'A'; a <= 'Z'; a++)
+            {
+                count_mp.Add(a, 0);
+            }
+            for (int i = 0; i < cipher.Length; i++)
+            {
+                count_mp[cipher[i]]++;
+            }
+
+            var items = from pair in count_mp
+                        orderby pair.Value descending
+                        select pair;
+            int n = 1;
+            Dictionary<char, char> keyMap = new Dictionary<char, char>();
+            // keymap key=> chiper, value=> main cahr 
+            foreach (KeyValuePair<char, int> pair in items)
+            {
+                keyMap.Add(pair.Key, mp[n]);
+                n++;
+            }
+            for (int i = 0; i < cipher.Length; i++)
+            {
+                str += keyMap[cipher[i]];
+            }
+            return str;
+            //throw new NotImplementedException();
         }
     }
 }
